@@ -1,0 +1,114 @@
+https://segmentfault.com/a/1190000011091907
+
+1. 使用箭头函数需要注意的地方
+当要求动态上下文的时候，你就不能使用箭头函数，比如：定义方法，用构造器创建对象，处理时间时用 this 获取目标。
+
+箭头函数与传统函数的区别，主要集中在以下方面：
+
+没有this、super、arguments 和 new.target 绑定，这些值由最近一层非箭头函数决定。
+不能通过 new 关键字调用，所以不能用作构造函数，否则程序会抛出错误（SyntaxError）。
+没有原型。由于不可以通过new 关键字调用箭头函数，因而没有构建原型的需求，所以箭头函数不存在 prototype 这个属性。
+不可以改变 this 的绑定，函数内部的 this 值不可以被改变，在函数的生命周期内始终保持一致。
+不支持 arguments 对象，所以你必须通过命名参数和不定参数这两种形式访问函数的参数。
+不支持重复的命名参数，无论在严格还是非严格模式下都不支持，而在传统的函数规定中只有在严格模式下才不能有重复的命名参数。
+
+
+
+2. ES6 let、const
+let是更完美的var
+
+let声明的变量拥有块级作用域,let声明仍然保留了提升的特性，但不会盲目提升。
+let声明的全局变量不是全局对象的属性。不可以通过window.变量名的方式访问
+形如for (let x…)的循环在每次迭代时都为x创建新的绑定
+let声明的变量直到控制流到达该变量被定义的代码行时才会被装载，所以在到达之前使用该变量会触发错误。
+const
+定义常量值，不可以重新赋值，但是如果值是一个对象，可以改变对象里的属性值
+
+3. 创建对象的三种方法
+第一种方式，字面量
+
+var o1 = {name: "o1"}
+第二种方式，通过构造函数
+
+var o2 = new Object({name: "o2"})
+var M = function(name){ this.name = name }
+var o3 = new M("o3")
+第三种方式，Object.create
+
+var  p = {name: "p"}
+var o4 = Object.create(p)
+新创建的对o4的原型就是p，同时o4也拥有了属性name
+
+4. 当new Foo()时发生了什么
+1.创建了一个新对象
+2.将新创建的空对象的隐式原型指向其构造函数的显示原型。
+3.将this指向这个新对象
+4.如果无返回值或者返回一个非对象值，则将新对象返回；如果返回值是一个新对象的话那么直接直接返回该对象。
+
+5. 你做过哪些性能优化
+雪碧图，移动端响应式图片，静态资源CDN，减少Dom操作（事件代理、fragment），压缩JS和CSS、HTML等，DNS预解析
+
+前端路由的原理
+什么是路由？简单的说，路由是根据不同的 url 地址展示不同的内容或页面
+
+使用场景？前端路由更多用在单页应用上, 也就是SPA, 因为单页应用, 基本上都是前后端分离的, 后端自然也就不会给前端提供路由。
+
+前端的路由和后端的路由在实现技术上不一样，但是原理都是一样的。在 HTML5 的 history API 出现之前，前端的路由都是通过 hash 来实现的，hash 能兼容低版本的浏览器。
+
+6. 两种实现前端路由的方式
+HTML5 History两个新增的API：history.pushState 和 history.replaceState，两个 API 都会操作浏览器的历史记录，而不会引起页面的刷新。
+
+Hash就是url 中看到 # ,我们需要一个根据监听哈希变化触发的事件( hashchange) 事件。我们用 window.location 处理哈希的改变时不会重新渲染页面，而是当作新页面加到历史记录中，这样我们跳转页面就可以在 hashchange 事件中注册 ajax 从而改变页面内容。
+
+优点
+从性能和用户体验的层面来比较的话，后端路由每次访问一个新页面的时候都要向服务器发送请求，然后服务器再响应请求，这个过程肯定会有延迟。而前端路由在访问一个新页面的时候仅仅是变换了一下路径而已，没有了网络延迟，对于用户体验来说会有相当大的提升。
+
+14.script标签的defer、async的区别
+defer是在HTML解析完之后才会执行，如果是多个，按照加载的顺序依次执行
+async是在加载完成后立即执行，如果是多个，执行顺序和加载顺序无关
+
+沙箱模式
+沙箱模式就是一个自调用函数，代码写到函数中一样会执行，但是不会与外界有任何的影响，比如jQuery
+
+(function () {
+   var jQuery = function () { // 所有的算法 }
+   // .... // .... jQuery.each = function () {}
+   window.jQuery = window.$ = jQuery;
+})();
+$.each( ... )
+
+原型
+原型是什么
+原型就是一个普通的对象，每个对象都有一个原型（Object除外），原型能存储我们的方法，构造函数创建出来的实例对象能够引用原型中的方法。
+
+查看原型
+以前一般使用对象的__proto__属性，ES6推出后，推荐用Object.getPrototypeOf()方法来获取对象的原型
+
+什么是原型链？
+凡是对象就有原型，那么原型又是对象，因此凡是给定一个对象，那么就可以找到他的原型，原型还有原型，那么如此下去，就构成一个对象的序列，称该结构为原型链。
+
+
+DOM事件的级别
+
+DOM0，element.onclick = function(){}
+DOM2，element.addEventListener('click', function(){}, false);
+DOM事件模型是什么：指的是冒泡和捕获
+DOM事件流是什么：捕获阶段 -> 目标阶段 -> 冒泡阶段
+描述DOM事件捕获的具体流程
+window --> document --> documentElement(html标签) --> body --> .... --> 目标对象
+Event对象常见应用
+
+event.preventDefault()，阻止默认行为
+event.stopPropagation()，阻止事件冒泡
+event.stopImmediatePropagation()，阻止剩余的事件处理函数执行并且防止事件冒泡到DOM树上，这个方法不接受任何参数。
+event.currentTarget，返回绑定事件的元素
+event.target，返回触发事件的元素
+如何自定义事件
+Event，不能传递参数
+
+var eve = new Event('自定义事件名');
+ev.addEventListener('自定义事件名', function(){
+    console.log('自定义事件')
+});
+ev.dispatchEvent(eve);
+CustomEvent，还可以指定参数

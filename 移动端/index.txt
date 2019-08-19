@@ -1,0 +1,128 @@
+移动端加上：
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no,maximum-scale=1.0,minimum-scale=1.0">
+
+//rem适配
+//rem适配原理：改变了一个元素在不同设备上占据的css像素的个数
+/*rem适配的优缺点
+    优点:没有破坏完美视口
+    缺点:px值到rem的转换太复杂*/
+
+(function(){
+    var styleNode = document.createElement("style");
+    var w = document.documentElement.clientWidth/16;
+    styleNode.innerHTML = "html{font-size:"+w+"px!important}";
+    document.head.appendChild(styleNode);
+})()
+
+
+/*viewport适配的原理：
+    viewport适配方案中，每一个元素在不同设备上占据的css像素的个数是一样的。但是css像素和物理像素的比例是不一样的，等比的*/
+/*viewport适配的优缺点：
+    优点:所量即所得
+    缺点:没有使用完美视口*/
+(function(){
+    var targetW = 640;
+    var scale = document.documentElement.clientWidth/targetW;
+    var meta =	document.querySelector("meta[name='viewport']");
+    meta.content="initial-scale="+scale+",minimum-scale="+scale+",maximum-scale="+scale+",user-scalable=no";
+})()
+
+适配1px
+window.onload=function(){
+    (function(){
+        var dpr  = window.devicePixelRatio||1;
+        var styleNode = document.createElement("style");
+        var w = document.documentElement.clientWidth*dpr/16;
+        styleNode.innerHTML="html{font-size:"+w+"px!important}";
+        document.head.appendChild(styleNode);
+
+        var scale = 1/dpr;
+        var meta = document.querySelector("meta[name='viewport']");
+        meta.content="width=device-width,initial-scale="+scale;
+    })()
+}
+适配1px主流
+#test{
+    width: 100%;
+    height:1px ;
+    margin-top: 50px;
+    background: black;
+}
+@media only screen and (-webkit-device-pixel-ratio:2 ) {
+    #test{
+        transform: scaleY(.5);
+    }
+}
+@media only screen and (-webkit-device-pixel-ratio:3 ) {
+    #test{
+        transform: scaleY(.333333333333333333);
+    }
+}
+
+移动端事件
+querySeletorAll是静态列表，添加新的元素后再次用querySeletorAll是静态列表获取一次
+
+touchstart
+touchmove
+touchend
+
+item.addEventListener("touchstart",function(ev){
+    ev=ev||event;
+    ev.preventDefault();
+})
+
+/*
+    1.meta标签
+    2.全面阻止事件的默认行为
+        隐患:页面上所有的滚动条失效
+        ---> 自定义更牛逼的滚动条！
+    3.一个适配方案
+
+
+*/
+document.addEventListener("touchstart",function(ev){
+    ev=ev||event;
+    ev.preventDefault();
+})
+
+
+window.onload=function(){
+    document.addEventListener("touchstart",function(ev){
+        ev=ev||event;
+        ev.preventDefault();
+    })
+
+    //移动端a标签的跳转方案  解决误触
+    var aNodes = document.querySelectorAll("a");
+    for(var i=0;i<aNodes.length;i++){
+        aNodes[i].addEventListener("touchstart",function(){
+            this.isMoved=false;
+        })
+
+
+        aNodes[i].addEventListener("touchmove",function(){
+            this.isMoved=true;
+        })
+
+
+        aNodes[i].addEventListener("touchend",function(){
+            if(!this.isMoved){
+                location.href=this.href;
+            }
+        })
+    }
+}
+
+var item = document.querySelector(".item");
+//changedTouches:触发当前事件的手指列表
+//targetTouches:触发当前事件时元素上的手指列表
+//touches:触发当前事件时屏幕上的手指列表
+item.addEventListener("touchend",function(ev){
+    ev = ev||event;
+    var item = document.querySelector(".item");
+    item.innerHTML="changed:"+ev.changedTouches.length+"<br/>";
+    item.innerHTML+="target:"+ev.targetTouches.length+"<br/>";
+    item.innerHTML+="touches:"+ev.touches.length+"<br/>";
+
+    console.log(ev)
+})

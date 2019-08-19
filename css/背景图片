@@ -1,0 +1,77 @@
+1.大背景图
+通过把这张图片作为网站的背景图来达到显示效果的。只需要给body标签加如下属性即可：
+body{
+    background-image: url(/Users/smyhvae/Dropbox/img/20170812_1950.jpg);
+    background-repeat: no-repeat;
+    background-position: center top;
+}
+right center表示将图片放到右边的中间；center center表示将图片放到正中间。
+bottom表示图片的底边和父亲底边贴齐（好好理解）。
+上方代码中，如果没加background-position这个属性，背景图会默认处于浏览器的左上角（显得很丑）；
+加了此属性之后，图片在水平方向就位于浏览器的中间了。
+
+2.（通栏banner）
+很多网站的首页都会有banner图（网站最上方的全屏大图叫做「通栏banner」），这种图要求横向的宽度特别大。
+比如说，设计师给你一张1920*465的超大banner图，如果我们把这个banner图作为img标签直接插入网页中，会有问题的：
+首先，图片不在网页的中间；其次，肯定会出现横向滚动条
+
+正确的做法是，将banner图作为div的背景图，这样的话，背景图超出div的部分，会自动移溢出。需要给div设置的属性如下：
+div{
+    height: 465px;
+    background-image: url(http://img.smyhvae.com/20170813_1053.jpg);
+    background-position: center top;
+    background-repeat: no-repeat;
+}
+上方代码中，我们给div设置height（高度为banner图的高度），不需要设置宽度（因为宽度会自动霸占整行）。
+
+PS：以后的CSS3内容中，我们会接触到更多的background属性： background-origin、background-clip、background-size
+（在CSS2.1背景图片是不能调整尺寸，IE9开始兼容）、多背景
+
+
+logo背景图有利于seo
+
+<h1 class="logo">
+    <a href="#">
+        博雅互动-世界上最好的游戏公司
+    </a>
+</h1>
+
+.header .logo{
+    float: left;
+    padding-left: 12px;
+    margin-right: 39px;
+    width: 174px;
+    height: 58px;
+}
+.header .logo a{
+    display: block;
+    width: 174px;
+    height: 58px;
+    background:url(images/logo.png) no-repeat;
+    text-indent: -999em;
+}
+
+由于搜索引擎是搜不到图片的，所以一定要把“博雅互动”这几个文字加上去，
+然后通过text-indent缩进的属性把文字赶走到视线以外的地方。这是做搜索引擎优化的一个重要的技巧。
+另外，背景要放在里层的a标签里，不要放在外层的h1标签里。假设背景图放在h1里，那么不管h1的padding有多大，
+背景图的位置都不会变。
+
+.content .product ul li p.djbf a{
+    background:url(images/sanjiaoxing.png) no-repeat right center;
+    padding-right: 12px;
+}
+我们在第6行给“点击播放”这个超链接加一个右padding（很关键），
+然后在第5行把小三角这个背景图放在右padding的位置，就能达到想要的视觉效果。
+
+
+background-position:10% 20%；
+百分比：参照尺寸为背景图片定位区域的大小减去背景图片的大小
+第一个值：元素在水平方向的位移
+第二个值：元素在垂直方向的位移
+计算：x=(该区域宽-背景图宽)*10%
+      y=该区域高-背景图高)*20%
+
+transparent 透明的（不可继承）
+
+
+

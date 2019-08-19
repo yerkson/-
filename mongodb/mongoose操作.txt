@@ -1,0 +1,6 @@
+1)下载安装mongoose:npm i mongoose --save
+2)在项目中引入mongoose:var mongoose = require("mongoose")
+3)连接mongodb数据库
+mongoose.connect('mongodb://数据库ip地址：端口号/数据库名',{useMongoClient: true});
+    -如果端口号为默认（27017）则可以省略不写
+mongoose.connect('mongodb://localhost/test',{useMongoClient: true});
